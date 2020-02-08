@@ -6,8 +6,11 @@ class PlayersViewModel {
 
     private $playersModel;
 
-    public function __construct() {
-        $this->playersModel = new PlayersModel;
+    public function __construct($model = null) {
+        if(!$model) {
+            $model = new PlayersModel;
+        }
+        $this->playersModel = $model;
     }
 
     /**

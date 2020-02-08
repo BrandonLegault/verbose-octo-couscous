@@ -6,8 +6,11 @@ class PlayersView {
 
     private $playersViewModel;
 
-    public function __construct() {
-        $this->playersViewModel = new PlayersViewModel();
+    public function __construct($viewModel = null) {
+        if(!$viewModel) {
+            $viewModel = new PlayersViewModel();
+        }
+        $this->playersViewModel = $viewModel;
     }
 
     function display($isCLI, $source, $filename = null) {
