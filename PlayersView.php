@@ -1,9 +1,6 @@
 <?php
 
 class PlayersView {
-
-    private $playersViewModel;
-
     public function display($isCLI, $players) {
         if ($isCLI) {
             echo "Current Players: \n";
