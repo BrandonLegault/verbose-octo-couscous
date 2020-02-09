@@ -1,22 +1,10 @@
 <?php
 
-include './PlayersViewModel.php';
-
 class PlayersView {
 
     private $playersViewModel;
 
-    public function __construct($viewModel = null) {
-        if(!$viewModel) {
-            $viewModel = new PlayersViewModel();
-        }
-        $this->playersViewModel = $viewModel;
-    }
-
-    function display($isCLI, $source, $filename = null) {
-
-        $players = $this->playersViewModel->readPlayers($source, $filename);
-
+    public function display($isCLI, $players) {
         if ($isCLI) {
             echo "Current Players: \n";
             foreach ($players as $player) {

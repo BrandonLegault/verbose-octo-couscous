@@ -1,16 +1,30 @@
 <?php
 
 include './PlayersModel.php';
+include './PlayersView.php';
 
 class PlayersViewModel {
 
     private $playersModel;
 
-    public function __construct($model = null) {
+    private $playersView;
+
+    public function __construct($model = null, $view = null) {
         if(!$model) {
             $model = new PlayersModel;
         }
+        if(!$view) {
+            $view = new PlayersView;
+        }
+
         $this->playersModel = $model;
+        $this->playersView = $view;
+    }
+
+    public function displayView($isCLI, $source, $filename = null) {
+        $players = $this->readPlayers($source, $filename);
+
+        $this->playersView->display($isCLI, $players);
     }
 
     /**
