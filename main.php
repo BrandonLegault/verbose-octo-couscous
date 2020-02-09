@@ -14,4 +14,6 @@ $vmFromJson->displayView();
 $vmFromFile = new PlayersViewModel($isCLI = php_sapi_name() === 'cli', $source = 'file', $filename = './playerdata.json');
 $vmFromFile->displayView();
 
+$vmFromFile->savePlayersDataToFile('players.json');
+
 ?>
