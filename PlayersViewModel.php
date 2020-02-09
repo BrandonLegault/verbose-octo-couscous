@@ -5,11 +5,15 @@ include './PlayersView.php';
 
 class PlayersViewModel {
 
+    private $isCLI;
+
     private $playersModel;
 
     private $playersView;
 
-    public function __construct($model = null, $view = null) {
+    public function __construct($isCLI = null, $source = null, $filename = null, $model = null, $view = null) {
+        $this->isCLI = $isCLI;
+
         if(!$model) {
             $model = new PlayersModel;
         }
@@ -19,12 +23,22 @@ class PlayersViewModel {
 
         $this->playersModel = $model;
         $this->playersView = $view;
+
+        if($source) {
+            $setPlayerData($source, $filename);
+        }
     }
 
-    public function displayView($isCLI, $source, $filename = null) {
+    public function setPlayerData($source, $filename = null) {
         $players = $this->readPlayers($source, $filename);
+        $this->playersModel->setPlayersArray($players);
+    }
 
-        $this->playersView->display($isCLI, $players);
+    public function displayView($isCLI = null) {
+        if($isCLI == null) {
+            $isCLI = $this->isCLI;
+        }
+        $this->playersView->display($isCLI, $playersModel->getPlayersArray);
     }
 
     /**
@@ -32,7 +46,7 @@ class PlayersViewModel {
      * @param $filename string Only used if we're reading players in 'file' mode.
      * @return string json
      */
-    function readPlayers($source, $filename = null) {
+    private function readPlayers($source, $filename = null) {
         $playerData = null;
 
         // this is janky, how about introducing an interface that can get the data?
@@ -61,7 +75,7 @@ class PlayersViewModel {
      * @param $filename string Only used if we're writing in 'file' mode
      * @param $player \stdClass Class implementation of the player with name, age, job, salary.
      */
-    function writePlayer($source, $player, $filename = null) {
+    private function writePlayer($source, $player, $filename = null) {
         switch ($source) {
             case 'array':
                 $playersModel->setPlayersArray($player);
@@ -87,7 +101,7 @@ class PlayersViewModel {
     }
 
 
-    function getPlayerDataArray() {
+    private function getPlayerDataArray() {
 
         // I would like to change this to create json so that the data is always stored as json,
         // but I think this complexity is supposed to make the excersize more complex
@@ -125,12 +139,12 @@ class PlayersViewModel {
 
     }
 
-    function getPlayerDataJson() {
+    private function getPlayerDataJson() {
         $json = '[{"name":"Jonas Valenciunas","age":26,"job":"Center","salary":"4.66m"},{"name":"Kyle Lowry","age":32,"job":"Point Guard","salary":"28.7m"},{"name":"Demar DeRozan","age":28,"job":"Shooting Guard","salary":"26.54m"},{"name":"Jakob Poeltl","age":22,"job":"Center","salary":"2.704m"}]';
         return $json;
     }
 
-    function getPlayerDataFromFile($filename) {
+    private function getPlayerDataFromFile($filename) {
         $file = file_get_contents($filename);
         return $file;
     }
