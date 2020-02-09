@@ -10,17 +10,17 @@ class PlayersModel {
     }
 
     public function getPlayersArray() {
-        return $playersArray;
+        return $this->playersArray;
     }
 
     public function setPlayersArray($array = null, $json = null) {
         if($array) {
             // TODO: assert structure
-            $playersArray = $array;
+            $this->playersArray = $array;
         } else if($json) {
             // TODO: assert valid json
             $arrayFromJson = json_decode($json);
-            $playersArray = $arrayFromJson;
+            $this->playersArray = $arrayFromJson;
         }
         
     }

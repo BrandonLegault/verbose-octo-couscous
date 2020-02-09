@@ -25,7 +25,7 @@ class PlayersViewModel {
         $this->playersView = $view;
 
         if($source) {
-            $setPlayerData($source, $filename);
+            $this->setPlayerData($source, $filename);
         }
     }
 
@@ -38,7 +38,7 @@ class PlayersViewModel {
         if($isCLI == null) {
             $isCLI = $this->isCLI;
         }
-        $this->playersView->display($isCLI, $playersModel->getPlayersArray);
+        $this->playersView->display($isCLI, $this->playersModel->getPlayersArray());
     }
 
     /**
@@ -78,12 +78,12 @@ class PlayersViewModel {
     private function writePlayer($source, $player, $filename = null) {
         switch ($source) {
             case 'array':
-                $playersModel->setPlayersArray($player);
+                $this->playersModel->setPlayersArray($player);
                 break;
             case 'json' :
     // AAAAAAAAAAAAAAAAAAAAAAAaaaaahhhhhhhhhhhhhhhhhHHHHHHHHHHHhhgh
                 $players = [];
-                if ($playersModel->getPlayerJsonString) {
+                if ($this->playersModel->getPlayerJsonString) {
                     $players = json_decode($this->playerJsonString);
                 }
                 $players[] = $player;
