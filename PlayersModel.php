@@ -4,33 +4,27 @@ class PlayersModel {
 
     private $playersArray;
 
-    private $playerJsonString;
-
     // could I use a php equivalent of Lombok (Java) to automate this boilerplate?
     public function __construct() {
-        //We're only using this if we're storing players as an array.
         $this->playersArray = [];
-
-        //We'll only use this one if we're storing players as a JSON string
-        $this->playerJsonString = null;
     }
 
     public function getPlayersArray() {
         return $playersArray;
     }
 
-    public function setPlayersArray($array) {
-        $playersArray = $array;
+    public function setPlayersArray($array = null, $json = null) {
+        if($array) {
+            // TODO: assert structure
+            $playersArray = $array;
+        } else if($json) {
+            // TODO: assert valid json
+            $arrayFromJson = json_decode($json);
+            $playersArray = $arrayFromJson;
+        }
+        
     }
 
-    public function getPlayersJsonString() {
-        return $playerJsonString;
-    }
-
-    public function setPlayersJsonString($string) {
-        return $playerJsonString;
-    }
-    
 }
 
 ?>
