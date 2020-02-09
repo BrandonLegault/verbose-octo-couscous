@@ -2,6 +2,7 @@
 
 include './PlayersModel.php';
 include './PlayersView.php';
+include './Reader.php';
 
 class PlayersViewModel {
 
@@ -52,76 +53,16 @@ class PlayersViewModel {
      * @return string json
      */
     private function readPlayers($source, $filename = null) {
-        $playerData = null;
-
-        // this is janky, how about introducing an interface that can get the data?
-        switch ($source) {
-            case 'array':
-                $playerData = $this->getPlayerDataArray();
-                break;
-            case 'json':
-                $playerData = $this->getPlayerDataJson();
-                break;
-            case 'file':
-                $playerData = $this->getPlayerDataFromFile($filename);
-                break;
+        $factory = new PlayersReaderFactory();
+        $factory->setSource($source);
+        if($filename) {
+            $factory->setFileName($filename);
         }
+        
+        $reader = $factory->makePlayersReader();
+        $playersData = $reader->getPlayersData();
 
-        if (is_string($playerData)) {
-            $playerData = json_decode($playerData);
-        }
-
-        return $playerData;
-
-    }
-
-
-    private function getPlayerDataArray() {
-
-        // I would like to change this to create json so that the data is always stored as json,
-        // but I think this complexity is supposed to make the excersize more complex
-        $players = [];
-
-        $jonas = new \stdClass();
-        $jonas->name = 'Jonas Valenciunas';
-        $jonas->age = 26;
-        $jonas->job = 'Center';
-        $jonas->salary = '4.66m';
-        $players[] = $jonas;
-
-        $kyle = new \stdClass();
-        $kyle->name = 'Kyle Lowry';
-        $kyle->age = 32;
-        $kyle->job = 'Point Guard';
-        $kyle->salary = '28.7m';
-        $players[] = $kyle;
-
-        $demar = new \stdClass();
-        $demar->name = 'Demar DeRozan';
-        $demar->age = 28;
-        $demar->job = 'Shooting Guard';
-        $demar->salary = '26.54m';
-        $players[] = $demar;
-
-        $jakob = new \stdClass();
-        $jakob->name = 'Jakob Poeltl';
-        $jakob->age = 22;
-        $jakob->job = 'Center';
-        $jakob->salary = '2.704m';
-        $players[] = $jakob;
-
-        return $players;
-
-    }
-
-    private function getPlayerDataJson() {
-        $json = '[{"name":"Jonas Valenciunas","age":26,"job":"Center","salary":"4.66m"},{"name":"Kyle Lowry","age":32,"job":"Point Guard","salary":"28.7m"},{"name":"Demar DeRozan","age":28,"job":"Shooting Guard","salary":"26.54m"},{"name":"Jakob Poeltl","age":22,"job":"Center","salary":"2.704m"}]';
-        return $json;
-    }
-
-    private function getPlayerDataFromFile($filename) {
-        $file = file_get_contents($filename);
-        return $file;
+        return $playersData;
     }
 
 }
