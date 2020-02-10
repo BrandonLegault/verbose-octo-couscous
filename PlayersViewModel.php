@@ -7,18 +7,18 @@ include './Writer.php';
 
 class PlayersViewModel {
 
-    private $isCLI;
+    private $viewType;
 
     private $playersModel;
 
     /**
      * @param $model optional model object; otherwise, a new model is created
-     * @param $isCLI optional boolean to set default value
+     * @param $viewType optional string to set default value. 'cli' or 'web'
      * @param $source optional string Where we're retrieving the data from. 'json', 'array' or 'file'
      * @param $filename optional string Only used if we're reading players in 'file' mode.
      */
-    public function __construct($model = null, $isCLI = null, $source = null, $filename = null) {
-        $this->isCLI = $isCLI;
+    public function __construct($model = null, $viewType = null, $source = null, $filename = null) {
+        $this->viewType = $viewType;
 
         if(!$model) {
             $model = new PlayersModel;
@@ -35,13 +35,13 @@ class PlayersViewModel {
         $this->playersModel->setPlayersArray($players);
     }
 
-    public function displayView($isCLI = null) {
-        if($isCLI == null) {
-            $isCLI = $this->isCLI;
+    public function displayView($viewType = null) {
+        if($viewType == null) {
+            $viewType = $this->viewType;
         }
 
         $factory = new PlayersViewerFactory();
-        $factory->setIsCli($isCLI);
+        $factory->setViewType($viewType);
 
         $viewer = $factory->makePlayersViewer();
         $playersData = $this->playersModel->getPlayersArray();

@@ -21,7 +21,7 @@
 interface IReadWritePlayers {
     function readPlayers($source, $filename = null);
     function writePlayer($source, $player, $filename = null);
-    function display($isCLI, $course, $filename = null); // why is this here? -> I'll put it in a "view"
+    function display($viewType, $course, $filename = null); // why is this here? -> I'll put it in a "view"
 }
 
 class PlayersObject implements IReadWritePlayers {
@@ -145,11 +145,11 @@ class PlayersObject implements IReadWritePlayers {
         return $file;
     }
 
-    function display($isCLI, $source, $filename = null) {
+    function display($viewType, $source, $filename = null) {
 
         $players = $this->readPlayers($source, $filename);
 
-        if ($isCLI) {
+        if ($viewType) {
             echo "Current Players: \n";
             foreach ($players as $player) {
 

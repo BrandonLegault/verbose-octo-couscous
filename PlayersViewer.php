@@ -55,19 +55,24 @@ class PlayersCliViewer implements PlayersViewer {
 }
 
 class PlayersViewerFactory {
-    private $isCLI = null;
+    private $viewType = null;
 
-    public function setIsCli($isCLI) {
-        $this->isCLI = $isCLI;
+    public function setViewType($viewType) {
+        $this->viewType = $viewType;
     }
 
     public function makePlayersViewer() {
-        assert($isCLI != null);
+        assert($this->viewType != null);
         $viewer = null;
-        if($this->isCLI) {
-            $viewer = new PlayersCliViewer();
-        } else {
-            $viewer = new PlayersWebViewer();
+        switch($this->viewType){
+            case 'cli':
+                $viewer = new PlayersCliViewer();
+                break;
+            case 'web':
+                $viewer = new PlayersWebViewer();
+                break;
+            default:
+                throw new Error('viewType could not be parsed');
         }
         return $viewer;
     }
