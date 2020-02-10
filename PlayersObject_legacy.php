@@ -21,13 +21,13 @@
 interface IReadWritePlayers {
     function readPlayers($source, $filename = null);
     function writePlayer($source, $player, $filename = null);
-    function display($viewType, $course, $filename = null); // why is this here? -> I'll put it in a "view"
+    function display($isCLI, $course, $filename = null);
 }
 
 class PlayersObject implements IReadWritePlayers {
 
-    // by mvc, these should be in their own class
     private $playersArray;
+
     private $playerJsonString;
 
     public function __construct() {
@@ -46,7 +46,6 @@ class PlayersObject implements IReadWritePlayers {
     function readPlayers($source, $filename = null) {
         $playerData = null;
 
-        // this is janky, how about introducing an interface that can get the data?
         switch ($source) {
             case 'array':
                 $playerData = $this->getPlayerDataArray();
@@ -99,8 +98,6 @@ class PlayersObject implements IReadWritePlayers {
 
     function getPlayerDataArray() {
 
-        // I would like to change this to create json so that the data is always stored as json,
-        // but I think this complexity is supposed to make the excersize more complex
         $players = [];
 
         $jonas = new \stdClass();
@@ -145,11 +142,11 @@ class PlayersObject implements IReadWritePlayers {
         return $file;
     }
 
-    function display($viewType, $source, $filename = null) {
+    function display($isCLI, $source, $filename = null) {
 
         $players = $this->readPlayers($source, $filename);
 
-        if ($viewType) {
+        if ($isCLI) {
             echo "Current Players: \n";
             foreach ($players as $player) {
 
@@ -159,6 +156,7 @@ class PlayersObject implements IReadWritePlayers {
                 echo "\tJob: $player->job\n\n";
             }
         } else {
+
             ?>
             <!DOCTYPE html>
             <html>
@@ -196,13 +194,8 @@ class PlayersObject implements IReadWritePlayers {
 
 }
 
-// I'm assuming I can refactor as much as I like, as long as this part still works
 $playersObject = new PlayersObject();
 
-//$playersObject->display(php_sapi_name() === 'cli', 'array');
-
-// Test all 3 so that I know I haven't broken anything: (careful, they all print the same thing, so I need to make sure they don't just call the other test...)
 $playersObject->display(php_sapi_name() === 'cli', 'array');
-$playersObject->display(php_sapi_name() === 'cli', 'json');
-$playersObject->display(php_sapi_name() === 'cli', 'file', './playerdata.json');
+
 ?>
