@@ -62,7 +62,7 @@ class PlayersViewerFactory {
     }
 
     public function makePlayersViewer() {
-        // TODO: assert isCli is not null
+        assert($isCLI != null);
         $viewer = null;
         if($this->isCLI) {
             $viewer = new PlayersCliViewer();

@@ -57,7 +57,7 @@ class PlayersFileReader implements PlayersReader {
     }
 
     public function getPlayersData() {
-        // TODO: assert that it is json file
+        assert(substr($this->filename,-5) == '.json');
         $fileData = file_get_contents($this->filename);
         return json_decode($fileData);
     }
@@ -77,7 +77,6 @@ class PlayersReaderFactory {
 
     public function makePlayersReader() {
         $reader = null;
-        // TODO: assert $source
         switch ($this->source) {
             case 'array':
                 $reader = new PlayersArrayReader();
@@ -86,7 +85,7 @@ class PlayersReaderFactory {
                 $reader = new PlayersJsonReader();
                 break;
             case 'file':
-                // TODO: assert $filename
+                assert($this->filename);
                 $reader = new PlayersFileReader($this->filename);
                 break;
             default:

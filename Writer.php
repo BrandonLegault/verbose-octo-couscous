@@ -12,7 +12,7 @@ class PlayersFileWriter implements PlayersWriter {
     }
 
     public function writePlayersData($players) {
-        // TODO: assert that it is json file
+        assert(substr($this->filename,-5) == '.json');
         file_put_contents($this->filename, json_encode($players));
     }
 }
