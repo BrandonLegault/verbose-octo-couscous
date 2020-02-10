@@ -10,10 +10,12 @@ class PlayersModel {
     }
 
     public function getPlayersArray() {
+        // should I clone to avoid leaking the reference?
         return $this->playersArray;
     }
 
     public function setPlayersArray($array) {
+        // should I clone to avoid something having access to our array?
         $this->playersArray = $array;
     }
 

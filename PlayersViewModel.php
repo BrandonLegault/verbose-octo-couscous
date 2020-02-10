@@ -11,6 +11,12 @@ class PlayersViewModel {
 
     private $playersModel;
 
+    /**
+     * @param $model optional model object; otherwise, a new model is created
+     * @param $isCLI optional boolean to set default value
+     * @param $source optional string Where we're retrieving the data from. 'json', 'array' or 'file'
+     * @param $filename optional string Only used if we're reading players in 'file' mode.
+     */
     public function __construct($model = null, $isCLI = null, $source = null, $filename = null) {
         $this->isCLI = $isCLI;
 
@@ -31,7 +37,6 @@ class PlayersViewModel {
 
     public function displayView($isCLI = null) {
         if($isCLI == null) {
-            // I'd guess that a viewModel would normally be viewed in the same way each time
             $isCLI = $this->isCLI;
         }
 
