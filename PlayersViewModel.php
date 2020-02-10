@@ -1,7 +1,7 @@
 <?php
 
 include './PlayersModel.php';
-include './PlayersView.php';
+include './PlayersViewer.php';
 include './Reader.php';
 include './Writer.php';
 
@@ -11,20 +11,13 @@ class PlayersViewModel {
 
     private $playersModel;
 
-    private $playersView;
-
-    public function __construct($isCLI = null, $source = null, $filename = null, $model = null, $view = null) {
+    public function __construct($isCLI = null, $source = null, $filename = null, $model = null) {
         $this->isCLI = $isCLI;
 
         if(!$model) {
             $model = new PlayersModel;
         }
-        if(!$view) {
-            $view = new PlayersView;
-        }
-
         $this->playersModel = $model;
-        $this->playersView = $view;
 
         if($source) {
             $this->setPlayerData($source, $filename);
@@ -38,9 +31,16 @@ class PlayersViewModel {
 
     public function displayView($isCLI = null) {
         if($isCLI == null) {
+            // I'd guess that a viewModel would normally be viewed in the same way each time
             $isCLI = $this->isCLI;
         }
-        $this->playersView->display($isCLI, $this->playersModel->getPlayersArray());
+
+        $factory = new PlayersViewerFactory();
+        $factory->setIsCli($isCLI);
+
+        $viewer = $factory->makePlayersViewer();
+        $playersData = $this->playersModel->getPlayersArray();
+        $viewer->display($playersData);
     }
 
     public function writePlayers($filename) {
