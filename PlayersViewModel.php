@@ -11,7 +11,7 @@ class PlayersViewModel {
 
     private $playersModel;
 
-    public function __construct($isCLI = null, $source = null, $filename = null, $model = null) {
+    public function __construct($model = null, $isCLI = null, $source = null, $filename = null) {
         $this->isCLI = $isCLI;
 
         if(!$model) {
