@@ -3,6 +3,7 @@
 include './PlayersModel.php';
 include './PlayersView.php';
 include './Reader.php';
+include './Writer.php';
 
 class PlayersViewModel {
 
@@ -42,9 +43,13 @@ class PlayersViewModel {
         $this->playersView->display($isCLI, $this->playersModel->getPlayersArray());
     }
 
-    // this seems out of place; maybe I should make a writer class
-    public function savePlayersDataToFile($filename) {
-        file_put_contents($filename, json_encode($this->playersModel->getPlayersArray()));
+    public function writePlayers($filename) {
+        $factory = new PlayersWriterFactory();
+        $factory->setFileName($filename);
+        
+        $writer = $factory->makePlayersWriter();
+        $playersData = $this->playersModel->getPlayersArray();
+        $writer->writePlayersData($playersData);
     }
 
     /**
